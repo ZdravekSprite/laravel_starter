@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +18,28 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+  return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+  return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
-
-Route::resource('roles', RoleController::class);
-
+require __DIR__ . '/auth.php';
+/*
+Route::resources([
+  'roles' => RoleController::class,
+  'users' => UserController::class,
+]);
+*/
+Route::resource('roles', RoleController::class)
+  ->missing(function (Request $request) {
+    return Redirect::route('roles.index');
+  });
+Route::resource('users', UserController::class)
+  ->missing(function (Request $request) {
+    return Redirect::route('users.index');
+  })
+  ->only([
+    'index', 'edit', 'update'
+  ]);
