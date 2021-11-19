@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 
 Route::get('/', function () {
   return view('welcome');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
   return view('dashboard');
@@ -34,7 +34,7 @@ Route::resources([
 */
 Route::resource('roles', RoleController::class)
   ->missing(function (Request $request) {
-    return Redirect::route('roles.index');
+    return redirect(route('roles.index'));
   });
 Route::resource('users', UserController::class)
   ->missing(function (Request $request) {

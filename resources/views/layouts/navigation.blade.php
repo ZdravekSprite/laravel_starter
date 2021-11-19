@@ -15,12 +15,16 @@
           <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
             {{ __('Dashboard') }}
           </x-nav-link>
+          @hasrole('superadmin')
           <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
             {{ __('Roles') }}
           </x-nav-link>
+          @endhasrole
+          @hasrole('admin')
           <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
             {{ __('Users') }}
           </x-nav-link>
+          @endhasrole
         </div>
       </div>
 
@@ -72,16 +76,20 @@
         {{ __('Dashboard') }}
       </x-responsive-nav-link>
     </div>
+    @hasrole('superadmin')
     <div class="pt-2 pb-3 space-y-1 border-t border-gray-200">
       <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
         {{ __('Roles') }}
       </x-responsive-nav-link>
     </div>
+    @endhasrole
+    @hasrole('admin')
     <div class="pt-2 pb-3 space-y-1 border-t border-gray-200">
       <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
         {{ __('Users') }}
       </x-responsive-nav-link>
     </div>
+    @endhasrole
 
     <!-- Responsive Settings Options -->
     <div class="pt-4 pb-1 border-t border-gray-200">
