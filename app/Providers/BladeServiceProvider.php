@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -27,8 +28,9 @@ class BladeServiceProvider extends ServiceProvider
   {
     Blade::if('hasrole', function ($expression) {
 
-      if (Auth::user()) {
-        if (Auth::user()->hasAnyRole($expression)) {
+      if (Auth::check()) {
+        $user = User::where('id', '=', Auth::id())->first();
+        if ($user->hasAnyRole($expression)) {
           return true;
         }
       }
