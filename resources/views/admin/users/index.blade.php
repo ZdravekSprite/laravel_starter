@@ -23,7 +23,7 @@
               <tr>
                 <th class="flex items-center pr-10">{{ $user->name }}</th>
                 <td>{{ $user->email }}</td>
-                <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
+                <td>{{ implode(', ', $user->roles()->orderBy('name', 'asc')->get()->pluck('name')->toArray()) }}</td>
                 <td>
                   <a class="float-left" href="{{ route('user.edit', $user) }}" title="{{ __('Edit') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">

@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth.admin');
+  }
+
   /**
    * Display a listing of the resource.
    *
@@ -47,7 +51,6 @@ class RoleController extends Controller
     $role->description = $request->input('description') ? $request->input('description') : null;
     $role->save();
     return redirect(route('role.show', $role))->with('status', 'Role stored');
-
   }
 
   /**
@@ -82,7 +85,7 @@ class RoleController extends Controller
   public function update(Request $request, Role $role)
   {
     $this->validate($request, [
-      'name' => 'required|string|min:3|max:255|unique:roles,name,'.$role->id,
+      'name' => 'required|string|min:3|max:255|unique:roles,name,' . $role->id,
       'description' => 'string|min:3|max:255'
     ]);
     $role->name = $request->input('name');

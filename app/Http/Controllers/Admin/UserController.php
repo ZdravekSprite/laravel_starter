@@ -6,9 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth.admin');
+  }
+
   /**
    * Display a listing of the resource.
    *
@@ -59,6 +65,10 @@ class UserController extends Controller
    */
   public function edit(User $user)
   {
+    $auth = User::where('id', '=', Auth::id())->first();
+    if (!$auth->hasAnyRole('superadmin') && $user->hasAnyRole('superadmin')) {
+      return redirect(route('users.index'))->with('status', 'You are not allowed to edit superadmin.');
+    }
     return view('admin.users.edit')->with(['user' => $user, 'roles' => Role::all()]);
   }
 
@@ -72,7 +82,7 @@ class UserController extends Controller
   public function update(Request $request, User $user)
   {
     $user->roles()->sync($request->roles);
-    return redirect()->route('users.index')->with('status', 'User updated');
+    return redirect(route('users.index'))->with('status', 'User updated');
   }
 
   /**

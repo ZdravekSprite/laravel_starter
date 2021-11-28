@@ -32,26 +32,28 @@ Route::resources([
   'users' => UserController::class,
 ]);
 */
-Route::resource('roles', RoleController::class)
-  ->only([
-    'index'
-  ]);
-Route::resource('role', RoleController::class)
-  ->except([
-    'index'
-  ])
-  ->missing(function (Request $request) {
-    return redirect(route('roles.index'));
-  });
+Route::middleware(['auth.admin'])->group(function () {
+  Route::resource('roles', RoleController::class)
+    ->only([
+      'index'
+    ]);
+  Route::resource('role', RoleController::class)
+    ->except([
+      'index'
+    ])
+    ->missing(function (Request $request) {
+      return redirect(route('roles.index'));
+    });
 
-Route::resource('users', UserController::class)
-  ->only([
-    'index'
-  ]);
-Route::resource('user', UserController::class)
-  ->missing(function (Request $request) {
-    return Redirect::route('users.index');
-  })
-  ->only([
-    'edit', 'update'
-  ]);
+  Route::resource('users', UserController::class)
+    ->only([
+      'index'
+    ]);
+  Route::resource('user', UserController::class)
+    ->missing(function (Request $request) {
+      return Redirect::route('users.index');
+    })
+    ->only([
+      'edit', 'update'
+    ]);
+});
