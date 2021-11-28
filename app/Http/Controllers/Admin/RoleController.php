@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -98,6 +99,7 @@ class RoleController extends Controller
    */
   public function destroy(Role $role)
   {
+    $role->users()->detach();
     $role->delete();
     return redirect(route('roles.index'))->with('status', 'Role destroyed');
   }
