@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
    */
   public function index()
   {
-    return view('users.index')->with('users', User::paginate(10));
+    return view('admin.users.index')->with('users', User::paginate(10));
   }
 
   /**
@@ -58,8 +59,7 @@ class UserController extends Controller
    */
   public function edit(User $user)
   {
-    return view('users.edit')->with(['user' => $user, 'roles' => Role::all()]);
-
+    return view('admin.users.edit')->with(['user' => $user, 'roles' => Role::all()]);
   }
 
   /**
@@ -72,7 +72,7 @@ class UserController extends Controller
   public function update(Request $request, User $user)
   {
     $user->roles()->sync($request->roles);
-    return redirect()->route('users.index');
+    return redirect()->route('users.index')->with('status', 'User updated');
   }
 
   /**

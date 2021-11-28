@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class RoleController extends Controller
   public function index()
   {
     $roles = Role::all();
-    return view('roles.index')->with(compact('roles'));
+    return view('admin.roles.index')->with(compact('roles'));
   }
 
   /**
@@ -25,7 +26,7 @@ class RoleController extends Controller
    */
   public function create()
   {
-    return view('roles.create');
+    return view('admin.roles.create');
   }
 
   /**
@@ -37,13 +38,14 @@ class RoleController extends Controller
   public function store(Request $request)
   {
     $this->validate($request, [
-      'name' => 'required|string|min:3|max:255|unique:roles'
+      'name' => 'required|string|min:3|max:255|unique:roles',
+      'description' => 'string|min:3|max:255'
     ]);
     $role = new Role;
     $role->name = $request->input('name');
     $role->description = $request->input('description') ? $request->input('description') : null;
     $role->save();
-    return redirect(route('roles.show', $role));
+    return redirect(route('role.show', $role))->with('status', 'Role stored');
 
   }
 
@@ -55,7 +57,7 @@ class RoleController extends Controller
    */
   public function show(Role $role)
   {
-    return view('roles.show')->with(compact('role'));
+    return view('admin.roles.show')->with(compact('role'));
   }
 
   /**
@@ -66,7 +68,7 @@ class RoleController extends Controller
    */
   public function edit(Role $role)
   {
-    return view('roles.edit')->with(compact('role'));
+    return view('admin.roles.edit')->with(compact('role'));
   }
 
   /**
@@ -79,12 +81,13 @@ class RoleController extends Controller
   public function update(Request $request, Role $role)
   {
     $this->validate($request, [
-      'name' => 'required|string|min:3|max:255|unique:roles'
+      'name' => 'required|string|min:3|max:255|unique:roles,name,'.$role->id,
+      'description' => 'string|min:3|max:255'
     ]);
     $role->name = $request->input('name');
     $role->description = $request->input('description') ? $request->input('description') : null;
     $role->save();
-    return redirect(route('roles.show', $role));
+    return redirect(route('role.show', $role))->with('status', 'Role updated');
   }
 
   /**
@@ -96,6 +99,6 @@ class RoleController extends Controller
   public function destroy(Role $role)
   {
     $role->delete();
-    return redirect(route('roles.index'));
+    return redirect(route('roles.index'))->with('status', 'Role destroyed');
   }
 }

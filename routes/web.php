@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
@@ -43,6 +43,7 @@ Route::resource('role', RoleController::class)
   ->missing(function (Request $request) {
     return redirect(route('roles.index'));
   });
+
 Route::resource('users', UserController::class)
   ->only([
     'index'

@@ -12,7 +12,7 @@
           <form method="POST" action="{{ route('role.store') }}">
             @csrf
 
-            @include('roles.form')
+            @include('admin.roles.form')
 
             <div class="flex items-center justify-end mt-4">
               <x-button class="ml-3">

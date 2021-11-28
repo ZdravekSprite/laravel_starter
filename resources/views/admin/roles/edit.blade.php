@@ -15,7 +15,7 @@
             @csrf
             @method('PUT')
 
-            @include('roles.form')
+            @include('admin.roles.form')
 
             <div class="flex items-center justify-end mt-4">
               <x-button class="ml-3">

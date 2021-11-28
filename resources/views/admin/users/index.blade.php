@@ -21,8 +21,8 @@
             <tbody>
               @foreach ($users as $user)
               <tr>
-                <th class="flex items-center pr-10">{{$user->name}}</th>
-                <td>{{$user->email}}</td>
+                <th class="flex items-center pr-10">{{ $user->name }}</th>
+                <td>{{ $user->email }}</td>
                 <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
                 <td>
                   <a class="float-left" href="{{ route('user.edit', $user) }}" title="{{ __('Edit') }}">
