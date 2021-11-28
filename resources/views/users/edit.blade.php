@@ -13,7 +13,7 @@
           <!-- Validation Errors -->
           <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-          <form method="POST" action="{{ route('users.update', $user->id) }}">
+          <form method="POST" action="{{ route('user.update', $user->id) }}">
             @csrf
             @method('PUT')
 

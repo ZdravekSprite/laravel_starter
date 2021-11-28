@@ -26,8 +26,17 @@ class BladeServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    Blade::if('hasrole', function ($expression) {
+    Blade::if('hasroles', function ($expression) {
+      if (Auth::check()) {
+        $user = User::where('id', '=', Auth::id())->first();
+        if ($user->hasAnyRoles($expression)) {
+          return true;
+        }
+      }
+      return false;
+    });
 
+    Blade::if('hasrole', function ($expression) {
       if (Auth::check()) {
         $user = User::where('id', '=', Auth::id())->first();
         if ($user->hasAnyRole($expression)) {
