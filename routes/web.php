@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ImpersonateController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\Redirect;
 |
 */
 
+Route::view('/', 'welcome')->name('home');
+/*
 Route::get('/', function () {
   return view('welcome');
 })->name('home');
-
+*/
 Route::get('/dashboard', function () {
   return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -32,7 +35,9 @@ Route::resources([
   'users' => UserController::class,
 ]);
 */
-Route::middleware(['auth.admin'])->group(function () {
+Route::get('admin/impersonate/stop', [ImpersonateController::class, 'stop'])->name('impersonate.stop');
+Route::prefix('admin')->middleware(['auth.admin'])->group(function () {
+//Route::prefix('admin')->middleware(['auth.admin'])->name('admin.')->group(function () {
   Route::resource('roles', RoleController::class)
     ->only([
       'index'
@@ -56,4 +61,5 @@ Route::middleware(['auth.admin'])->group(function () {
     ->only([
       'edit', 'update'
     ]);
+  Route::get('/impersonate/{id}', [ImpersonateController::class, 'start'])->name('impersonate.start');
 });

@@ -5,7 +5,7 @@
       <div class="flex">
         <!-- Logo -->
         <div class="flex-shrink-0 flex items-center">
-          <a href="{{ route('dashboard') }}">
+          <a href="{{ route('home') }}">
             <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
           </a>
         </div>
@@ -15,6 +15,11 @@
           <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
             {{ __('Dashboard') }}
           </x-nav-link>
+          @impersonate
+          <x-nav-link :href="route('impersonate.stop')">
+            {{ __('Stop Impersonating') }}
+          </x-nav-link>
+          @endimpersonate
           @hasrole('superadmin')
           <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
             {{ __('Roles') }}
@@ -76,6 +81,13 @@
         {{ __('Dashboard') }}
       </x-responsive-nav-link>
     </div>
+    @impersonate
+    <div class="pt-2 pb-3 space-y-1 border-t border-gray-200">
+      <x-responsive-nav-link :href="route('impersonate.stop')">
+        {{ __('Stop Impersonating') }}
+      </x-responsive-nav-link>
+    </div>
+    @endimpersonate
     @hasrole('superadmin')
     <div class="pt-2 pb-3 space-y-1 border-t border-gray-200">
       <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
