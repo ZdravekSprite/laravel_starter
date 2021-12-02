@@ -3,9 +3,12 @@
 use App\Http\Controllers\Admin\ImpersonateController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redirect;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +66,42 @@ Route::prefix('admin')->middleware(['auth.admin'])->group(function () {
     ]);
   Route::get('/impersonate/{id}', [ImpersonateController::class, 'start'])->name('impersonate.start');
 });
+
+Route::get('login/{provider}', function ($provider) {
+  return Socialite::driver($provider)->redirect();
+})->name('{provider}Login');
+Route::get('login/{provider}/callback', function ($provider) {
+  $social_user = Socialite::driver($provider)->user();
+  // $user->token
+  $user = User::firstOrCreate([
+    'email' => $social_user->getEmail(),
+  ]);
+  if (!$user->name) {
+    $user->name = $social_user->getName();
+  }
+  if (!$user[$provider . "_id"]) {
+    $user[$provider . "_id"] = $social_user->getId();
+  }
+  if ($social_user->getAvatar()) {
+    $url = $social_user->getAvatar() . '&access_token=' . $social_user->token;
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+    $res = curl_exec($ch);
+    $redirectedUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+    //$avatar = ltrim($redirectedUrl,"https://");
+    $avatar = $redirectedUrl;
+    if (!$user->avatar) {
+      $user->avatar = $avatar;
+    }
+    if (!$user[$provider . "_avatar"]) {
+      $user[$provider . "_avatar"] = $avatar;
+    }
+  }
+  $user->save();
+  Auth::Login($user, true);
+  return redirect(route('home'));
+})->name('{provider}Callback');
