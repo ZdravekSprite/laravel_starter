@@ -16,7 +16,7 @@
             {{ __('Dashboard') }}
           </x-nav-link>
           @impersonate
-          <x-nav-link :href="route('impersonate.stop')">
+          <x-nav-link :href="route('impersonate.stop')" :active="true">
             {{ __('Stop Impersonating') }}
           </x-nav-link>
           @endimpersonate
@@ -83,7 +83,7 @@
     </div>
     @impersonate
     <div class="pt-2 pb-3 space-y-1 border-t border-gray-200">
-      <x-responsive-nav-link :href="route('impersonate.stop')">
+      <x-responsive-nav-link :href="route('impersonate.stop')" :active="true">
         {{ __('Stop Impersonating') }}
       </x-responsive-nav-link>
     </div>

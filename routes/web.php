@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ImpersonateController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,23 +84,31 @@ Route::get('login/{provider}/callback', function ($provider) {
     $user[$provider . "_id"] = $social_user->getId();
   }
   if ($social_user->getAvatar()) {
-    $url = $social_user->getAvatar() . '&access_token=' . $social_user->token;
-    $ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-
-    $res = curl_exec($ch);
-    $redirectedUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-    //$avatar = ltrim($redirectedUrl,"https://");
-    $avatar = $redirectedUrl;
+    if($provider == 'facebook') {
+      $url = $social_user->getAvatar() . '&access_token=' . $social_user->token;
+      $ch = curl_init();
+  
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  
+      $res = curl_exec($ch);
+      $redirectedUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+      //$avatar = ltrim($redirectedUrl,"https://");
+      $avatar = $redirectedUrl;
+    } else {
+      $avatar = $social_user->getAvatar();
+    }
     if (!$user->avatar) {
       $user->avatar = $avatar;
     }
     if (!$user[$provider . "_avatar"]) {
       $user[$provider . "_avatar"] = $avatar;
     }
+  }
+  if (!$user->roles->pluck('name')->contains('socialuser')) {
+    $socialUserRole = Role::where('name', 'socialuser')->first();
+    $user->roles()->attach($socialUserRole);
   }
   $user->save();
   Auth::Login($user, true);
