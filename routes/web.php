@@ -63,7 +63,7 @@ Route::prefix('admin')->middleware(['auth.admin'])->group(function () {
       return Redirect::route('users.index');
     })
     ->only([
-      'edit', 'update'
+      'edit', 'update', 'show'
     ]);
   Route::get('/impersonate/{id}', [ImpersonateController::class, 'start'])->name('impersonate.start');
 });

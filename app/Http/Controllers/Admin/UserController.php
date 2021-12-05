@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-  public function __construct()
-  {
-    $this->middleware('auth.admin');
-  }
-
   /**
    * Display a listing of the resource.
    *
@@ -22,7 +17,13 @@ class UserController extends Controller
    */
   public function index()
   {
-    return view('admin.users.index')->with('users', User::paginate(10));
+    if (request()->is('api/*')) {
+      //an api call
+      return User::paginate(10);
+    } else {
+      //a web call
+      return view('admin.users.index')->with('users', User::paginate(10));
+    }
   }
 
   /**
@@ -54,7 +55,13 @@ class UserController extends Controller
    */
   public function show(User $user)
   {
-    //
+    if (request()->is('api/*')) {
+      //an api call
+      return $user;
+    } else {
+      //a web call
+      return view('admin.users.show')->with(compact('user'));
+    }
   }
 
   /**

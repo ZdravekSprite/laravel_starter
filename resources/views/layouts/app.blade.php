@@ -17,7 +17,7 @@
   <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">
-  <div class="min-h-screen bg-gray-100" id="app">
+  <div class="min-h-screen bg-gray-100">
     @include('layouts.navigation')
 
     <!-- Page Heading -->
@@ -28,7 +28,7 @@
     </header>
 
     <!-- Page Content -->
-    <main>
+    <main id="app">
       @if (session('status'))
       <div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
         <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

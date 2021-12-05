@@ -21,7 +21,7 @@
             <tbody>
               @foreach ($users as $user)
               <tr>
-                <th class="flex items-center pr-10"><img class="w-4" src={{ $user->avatar ?? '/img/avatar.jpg' }} />{{ $user->name }}</th>
+                <th class="flex items-center pr-10"><a href="{{ route('user.show', $user) }}" title="{{ $user->name }}"><img class="w-4 float-left m-1" src={{ $user->avatar ?? '/img/avatar.jpg' }} />{{ $user->name }}</a></th>
                 <td>{{ $user->email }}</td>
                 <td>{{ implode(', ', $user->roles()->orderBy('name', 'asc')->get()->pluck('name')->toArray()) }}</td>
                 <td>
