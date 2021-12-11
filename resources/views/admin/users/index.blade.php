@@ -43,7 +43,6 @@
             </tbody>
           </table>
           {{ $users->links() }}
-          <index-table />
         </div>
       </div>
     </div>
