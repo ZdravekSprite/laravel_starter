@@ -5394,8 +5394,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     if (this.message) {
-      this.body = this.message;
+      this.flash(this.message);
+    }
+  },
+  methods: {
+    flash: function flash(message) {
+      this.body = message;
       this.show = true;
+      var self = this;
+      setTimeout(function () {
+        self.show = false;
+      }.bind(this), 2000);
     }
   }
 });

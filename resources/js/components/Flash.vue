@@ -29,9 +29,19 @@ export default {
   },
   created() {
     if (this.message) {
-      this.body = this.message;
-      this.show = true;
+      this.flash(this.message);
     }
+  },
+
+  methods: {
+    flash(message) {
+      this.body = message;
+      this.show = true;
+      var self = this;
+      setTimeout(function () {
+        self.show = false;
+      }.bind(this), 2000);
+    },
   },
 };
 </script>
