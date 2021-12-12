@@ -43,6 +43,7 @@
             </tbody>
           </table>
           {{ $users->links() }}
+          <index-table :items="{{ json_encode($vueusers) }}" />
         </div>
       </div>
     </div>

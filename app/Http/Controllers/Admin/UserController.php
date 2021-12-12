@@ -17,12 +17,15 @@ class UserController extends Controller
    */
   public function index()
   {
+    //dd(User::paginate(10));
     if (request()->is('api/*')) {
       //an api call
       return User::paginate(10);
     } else {
       //a web call
-      return view('admin.users.index')->with('users', User::paginate(10));
+      $users = User::paginate(10);
+      $vueusers = User::all();
+      return view('admin.users.index')->with(compact('users','vueusers'));
     }
   }
 
